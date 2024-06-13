@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Form</title>
+    <style>
+      /* style.css */
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      .main-div {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        margin-top: 30px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="text"],
+      input[type="tel"],
+      input[type="email"],
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #45a049;
+      }
+
+      .address-fieldset {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      legend {
+        font-weight: bold;
+        padding: 0 10px;
+      }
+
+      .login-fieldset {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        width: 100%;
+        max-width: 400px;
+      }
+
+      @media (max-width: 600px) {
+        .main-div {
+          width: 90%;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+
+  <body align="center">
+    <h1>Form</h1>
+    <form method="post" id="form-id">
+    <div class="main-div">
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input
+          type="text"
+          id="first-name"
+          name="first-name"
+          placeholder="Enter your first name"
+        /><br />
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input
+          type="text"
+          id="last-name"
+          name="last-name"
+          placeholder="Enter your last name"
+        /><br />
+      </div>
+      <div class="form-group">
+        <label for="mobile-no">Mobile No</label>
+        <input
+          type="tel"
+          id="mobile-no"
+          name="mobile-no"
+          placeholder="Enter Mobile number"
+        /><br />
+        <span id="error" style="display: none">Number must be 10 digits</span>
+      </div>
+      <div class="form-group">
+        <label for="email-id">Email ID</label>
+        <input
+          type="email"
+          id="email-id"
+          name="email-id"
+          placeholder="Enter Email ID"
+        /><br />
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input
+          type="text"
+          id="address"
+          name="address"
+          placeholder="Enter your Address"
+        /><br />
+      </div>
+      <fieldset class="address-fieldset">
+        <legend>Address Details</legend>
+        <div class="form-group">
+          <label for="street">Street</label>
+          <input type="text" id="street" name="street" /><br />
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" name="city" /><br />
+        </div>
+        <div class="form-group">
+          <label for="state">State</label>
+          <input type="text" id="state" name="state" /><br />
+        </div>
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input type="text" id="country" name="country" /><br />
+        </div>
+      </fieldset>
+      <fieldset class="login-fieldset">
+        <div class="form-group">
+          <label for="Login ID">Login ID</label>
+          <input
+            type="text"
+            id="login-id"
+            name="login-id"
+            pattern="[a-zA-Z0-9]{8}"
+          /><br />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$"
+            required
+          /><br />
+          <button type="button" onclick="mySaveFunction()">Save</button>
+        </div>
+      </fieldset>
+    </form>
+    </div>
+  
+>
+<script>
+  function mySaveFunction() {
+
+
+
+    
+    const data = {
+                firstName: document.getElementById('first-name').value,
+                lastName: document.getElementById('last-name').value,
+                mobileNo: document.getElementById('mobile-no').value,
+                email: document.getElementById('email-id').value,
+                address: {
+                    street: document.getElementById('street').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    country: document.getElementById('country').value
+                },
+                loginId: document.getElementById('login-id').value,
+                password: document.getElementById('password').value
+            };
+alert('done', document.getElementById('first-name').value)
+console.log( data,"data")
+    fetch('/createUser', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(data => {
+                if (!data.errors) {
+                    alert('User saved successfully!');
+                    document.getElementById('form-id').reset();
+                } else {
+                    data.errors.forEach(error => {
+                        showError(error.message);
+                    });
+                }
+            })
+            .catch(error => {
+                alert("Can't save user" + error.message);
+            });
+        }
+  
+
+  fetch("/")
+</script>
+</body>
+</html>

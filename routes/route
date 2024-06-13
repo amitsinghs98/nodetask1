@@ -1,0 +1,22 @@
+const express = require("express");
+const router = express.Router();
+const path = require("path");
+const User = require("../model/model.js");
+
+// Saving user data
+
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "index.html"));
+
+  const user = new User(req.body);
+  user.save();
+  res.status(201).send(user);
+});
+router.post("/createUser", async (req, res) => {
+  console.log("coming");
+  const user = await new User(req.body);
+  user.save();
+  res.status(201).send(user);
+});
+
+module.exports = router;
