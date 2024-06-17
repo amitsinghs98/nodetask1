@@ -50,7 +50,7 @@
       input[type="text"],
       input[type="tel"],
       input[type="email"],
-      input[type="number"] {
+      input[type="password"] {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -93,6 +93,12 @@
         max-width: 400px;
       }
 
+      .error-message {
+        color: red;
+        font-size: 12px;
+        margin-top: 5px;
+      }
+
       @media (max-width: 600px) {
         .main-div {
           width: 90%;
@@ -104,145 +110,214 @@
 
   <body align="center">
     <h1>Form</h1>
-    <form method="post" id="form-id">
-    <div class="main-div">
-      <div class="form-group">
-        <label for="first-name">First Name</label>
-        <input
-          type="text"
-          id="first-name"
-          name="first-name"
-          placeholder="Enter your first name"
-        /><br />
-      </div>
-      <div class="form-group">
-        <label for="last-name">Last Name</label>
-        <input
-          type="text"
-          id="last-name"
-          name="last-name"
-          placeholder="Enter your last name"
-        /><br />
-      </div>
-      <div class="form-group">
-        <label for="mobile-no">Mobile No</label>
-        <input
-          type="tel"
-          id="mobile-no"
-          name="mobile-no"
-          placeholder="Enter Mobile number"
-        /><br />
-        <span id="error" style="display: none">Number must be 10 digits</span>
-      </div>
-      <div class="form-group">
-        <label for="email-id">Email ID</label>
-        <input
-          type="email"
-          id="email-id"
-          name="email-id"
-          placeholder="Enter Email ID"
-        /><br />
-      </div>
-      <div class="form-group">
-        <label for="address">Address</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          placeholder="Enter your Address"
-        /><br />
-      </div>
-      <fieldset class="address-fieldset">
-        <legend>Address Details</legend>
+    <form method="post" id="form-id" onsubmit="return validateForm()">
+      <div class="main-div">
         <div class="form-group">
-          <label for="street">Street</label>
-          <input type="text" id="street" name="street" /><br />
-        </div>
-        <div class="form-group">
-          <label for="city">City</label>
-          <input type="text" id="city" name="city" /><br />
-        </div>
-        <div class="form-group">
-          <label for="state">State</label>
-          <input type="text" id="state" name="state" /><br />
-        </div>
-        <div class="form-group">
-          <label for="country">Country</label>
-          <input type="text" id="country" name="country" /><br />
-        </div>
-      </fieldset>
-      <fieldset class="login-fieldset">
-        <div class="form-group">
-          <label for="Login ID">Login ID</label>
+          <label for="first-name">First Name</label>
           <input
             type="text"
-            id="login-id"
-            name="login-id"
-            pattern="[a-zA-Z0-9]{8}"
+            id="first-name"
+            name="first-name"
+            placeholder="Enter your first name"
+            required
           /><br />
         </div>
         <div class="form-group">
-          <label for="password">Password</label>
+          <label for="last-name">Last Name</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$"
+            type="text"
+            id="last-name"
+            name="last-name"
+            placeholder="Enter your last name"
             required
           /><br />
-          <button type="button" onclick="mySaveFunction()">Save</button>
         </div>
-      </fieldset>
+        <div class="form-group">
+          <label for="mobile-no">Mobile No</label>
+          <input
+            type="tel"
+            id="mobile-no"
+            name="mobile-no"
+            placeholder="Enter Mobile number"
+            required
+            pattern="\d{10}"
+            maxlength="10"
+          /><br />
+          <span id="mobile-error" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="email-id">Email ID</label>
+          <input
+            type="email"
+            id="email-id"
+            name="email-id"
+            placeholder="Enter Email ID"
+            required
+          /><br />
+          <span id="email-error" class="error-message"></span>
+        </div>
+        <div class="form-group">
+          <label for="address">Address</label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            placeholder="Enter your Address"
+          /><br />
+        </div>
+        <fieldset class="address-fieldset">
+          <legend>Address Details</legend>
+          <div class="form-group">
+            <label for="street">Street</label>
+            <input type="text" id="street" name="street" /><br />
+          </div>
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" name="city" /><br />
+          </div>
+          <div class="form-group">
+            <label for="state">State</label>
+            <input type="text" id="state" name="state" /><br />
+          </div>
+          <div class="form-group">
+            <label for="country">Country</label>
+            <input type="text" id="country" name="country" /><br />
+          </div>
+        </fieldset>
+        <fieldset class="login-fieldset">
+          <legend>Login Details</legend>
+          <div class="form-group">
+            <label for="login-id">Login ID</label>
+            <input
+              type="text"
+              id="login-id"
+              name="login-id"
+              placeholder="Enter Login ID"
+              required
+              pattern="[a-zA-Z0-9]{8,}"
+              title="Login ID must be at least 8 characters long and alphanumeric"
+            /><br />
+            <span id="login-error" class="error-message"></span>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter Password"
+              required
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+              title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character"
+            /><br />
+            <span id="password-error" class="error-message"></span>
+          </div>
+        </fieldset>
+      </div>
+      <input type="submit" value="Submit Form" />
     </form>
+    <div>
+      <a href="/fetchUsers"><button>Fetch here</button></a>
     </div>
-  
->
-<script>
-  function mySaveFunction() {
+    <script>
+      function validateForm() {
+        const firstName = document.getElementById("first-name").value;
+        const lastName = document.getElementById("last-name").value;
+        const mobileNo = document.getElementById("mobile-no").value;
+        const email = document.getElementById("email-id").value;
+        const loginId = document.getElementById("login-id").value;
+        const password = document.getElementById("password").value;
 
+        let valid = true;
 
-
-    
-    const data = {
-                firstName: document.getElementById('first-name').value,
-                lastName: document.getElementById('last-name').value,
-                mobileNo: document.getElementById('mobile-no').value,
-                email: document.getElementById('email-id').value,
-                address: {
-                    street: document.getElementById('street').value,
-                    city: document.getElementById('city').value,
-                    state: document.getElementById('state').value,
-                    country: document.getElementById('country').value
-                },
-                loginId: document.getElementById('login-id').value,
-                password: document.getElementById('password').value
-            };
-alert('done', document.getElementById('first-name').value)
-console.log( data,"data")
-    fetch('/createUser', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(data => {
-                if (!data.errors) {
-                    alert('User saved successfully!');
-                    document.getElementById('form-id').reset();
-                } else {
-                    data.errors.forEach(error => {
-                        showError(error.message);
-                    });
-                }
-            })
-            .catch(error => {
-                alert("Can't save user" + error.message);
-            });
+        // Mobile number validation
+        const mobilePattern = /^\d{10}$/;
+        if (!mobilePattern.test(mobileNo)) {
+          document.getElementById("mobile-error").textContent =
+            "Mobile number must be 10 digits";
+          valid = false;
+        } else {
+          document.getElementById("mobile-error").textContent = "";
         }
-  
 
-  fetch("/")
-</script>
-</body>
+        // Email validation
+        const emailPattern = /\S+@\S+\.\S+/;
+        if (!emailPattern.test(email)) {
+          document.getElementById("email-error").textContent =
+            "Invalid email format";
+          valid = false;
+        } else {
+          document.getElementById("email-error").textContent = "";
+        }
+
+        // Login ID validation
+        const loginIdPattern = /^[a-zA-Z0-9]{8,}$/;
+        if (!loginIdPattern.test(loginId)) {
+          document.getElementById("login-error").textContent =
+            "Login ID must be at least 8 characters and alphanumeric";
+          valid = false;
+        } else {
+          document.getElementById("login-error").textContent = "";
+        }
+
+        // Password validation
+        const passwordPattern =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(password)) {
+          document.getElementById("password-error").textContent =
+            "Password must be at least 8 characters with one lowercase, one uppercase, one number, and one special character";
+          valid = false;
+        } else {
+          document.getElementById("password-error").textContent = "";
+        }
+
+        return valid;
+      }
+
+      document
+        .getElementById("form-id")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form submission
+
+          if (validateForm()) {
+            const data = {
+              firstName: document.getElementById("first-name").value,
+              lastName: document.getElementById("last-name").value,
+              mobileNo: document.getElementById("mobile-no").value,
+              email: document.getElementById("email-id").value,
+              address: {
+                street: document.getElementById("street").value,
+                city: document.getElementById("city").value,
+                state: document.getElementById("state").value,
+                country: document.getElementById("country").value,
+              },
+              loginId: document.getElementById("login-id").value,
+              password: document.getElementById("password").value,
+            };
+
+            fetch("/createUser", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                if (!data.errors) {
+                  alert("User saved successfully!");
+                  document.getElementById("form-id").reset();
+                } else {
+                  data.errors.forEach((error) => {
+                    alert(error.message);
+                  });
+                }
+              })
+              .catch((error) => {
+                alert("Can't save user: " + error.message);
+              });
+          }
+        });
+    </script>
+  </body>
 </html>

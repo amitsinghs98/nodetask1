@@ -3,20 +3,37 @@ const router = express.Router();
 const path = require("path");
 const User = require("../model/model.js");
 
-// Saving user data
-
+// Serve HTML form
 router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-
-  const user = new User(req.body);
-  user.save();
-  res.status(201).send(user);
+  let parentDir = path.join(__dirname, "..");
+  res.sendFile(path.join(parentDir, "Views", "index.html"));
 });
+
+// Server fetchUsers.html
+router.get("/fetchUsers", (req, res) => {
+  let parentDir = path.join(__dirname, "..");
+  res.sendFile(path.join(parentDir, "Views", "fetchUsers.html"));
+});
+
+// Save user data
 router.post("/createUser", async (req, res) => {
-  console.log("coming");
-  const user = await new User(req.body);
-  user.save();
-  res.status(201).send(user);
+  try {
+    const user = new User(req.body);
+    await user.save();
+    res.status(201).send(user);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Fetch all users
+router.get("/fetchAllUsers", async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 module.exports = router;

@@ -3,26 +3,39 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
-console.log("env", process.env.MongoDB_URL);
-const app = express(); // defining the instance of express
-const route = require("./routes/route");
-const user = require("./model/model");
-// Middleware for validation between client and the server
-app.use(bodyParser.json()); // validate the json format while transfer of data
+
+const app = express();
+
+// Middleware for parsing JSON and URL-encoded data
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/", route);
+
+// Serve static files from the public directory
 app.use(express.static(path.join(__dirname, "public")));
+
+// Routes
+const route = require("./routes/route"); // Routes are defined in './routes/route'
+app.use("/", route); // Mounting routes defined in './routes/route' to the root path '/'
+
+// Define route to create a new user
 app.post("/createUser", async (req, res) => {
-  console.log("coming");
-  const user = await user.create(req.body);
-
-  res.status(201).send(user);
+  try {
+    const newUser = await user.create(req.body);
+    res.status(201).send(newUser);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
+
+// Define route to fetch all users
 app.get("/getAllUsers", async (req, res) => {
-  const data = await user.find({});
+  try {
+    const allUsers = await user.find({}); //'user' model is imported correctly
+    res.json(allUsers);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
-axios.get("/").then().catch();
-
 // Defining the mongoose connection
 
 mongoose
@@ -37,4 +50,3 @@ mongoose
 app.listen(3000, (err, data) => {
   console.log("started");
 });
-//
