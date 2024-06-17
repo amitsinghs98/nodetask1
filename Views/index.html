@@ -8,108 +8,148 @@
       /* style.css */
 
       body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-      }
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
 
-      h1 {
-        color: #333;
-      }
+h1 {
+  color: #333;
+}
 
-      .main-div {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        display: inline-block;
-        margin-top: 30px;
-      }
+.main-div {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  margin-top: 10px;
+  width: 90%;
+  max-width: 600px;
+  box-sizing: border-box;
+}
 
-      form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-      .form-group {
-        margin-bottom: 15px;
-        text-align: left;
-        width: 100%;
-        max-width: 400px;
-      }
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+  width: 100%;
+}
 
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
 
-      input[type="text"],
-      input[type="tel"],
-      input[type="email"],
-      input[type="password"] {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-      }
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
-      input[type="submit"] {
-        background-color: #4caf50;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 16px;
-      }
+input[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
 
-      input[type="submit"]:hover {
-        background-color: #45a049;
-      }
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
 
-      .address-fieldset {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        width: 100%;
-        max-width: 400px;
-      }
+  #fetch-button {
+    background-color: rgb(0, 168, 180); 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 30px;
+    transition: background-color 0.3s ease;
+  }
 
-      legend {
-        font-weight: bold;
-        padding: 0 10px;
-      }
+  #fetch-button:hover {
+    background-color:  aquamarine;
+  }
 
-      .login-fieldset {
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        padding: 10px;
-        width: 100%;
-        max-width: 400px;
-      }
+.address-fieldset {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-      .error-message {
-        color: red;
-        font-size: 12px;
-        margin-top: 5px;
-      }
+#fetch-fieldset {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  align-items: center;
+  padding: 20px;
+  width: 50%;
+  max-width: fit-content;
+  box-sizing: border-box;
+  margin:20px 0px 20px 0px;
+  
+}
 
-      @media (max-width: 600px) {
-        .main-div {
-          width: 90%;
-          padding: 15px;
-        }
-      }
-    </style>
+  #fetch-div {
+    display: flex;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    height: 40vh; /* Makes the div take the full height of the viewport */
+  }
+
+
+legend {
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+.login-fieldset {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+  .main-div {
+    width: 90%;
+    padding: 15px;
+  }
+}
+</style>
   </head>
 
-  <body align="center">
-    <h1>Form</h1>
+  <body>
+  
+    <h1>User Form</h1>
     <form method="post" id="form-id" onsubmit="return validateForm()">
       <div class="main-div">
         <div class="form-group">
@@ -238,10 +278,13 @@
           </div>
         </fieldset>
       </div>
-      <input type="submit" value="Submit Form" />
+      <input type="submit" value="Save Data" />
     </form>
-    <div>
-      <a href="/fetchUsers"><button>Fetch here</button></a>
+    <div id="fetch-div">
+      <fieldset id="fetch-fieldset">
+      <h1 style="padding-top: 20px;";>Here You can Fetch User Data</h1>
+      <button id="fetch-button" type="button" onclick="location.href='/fetchUsers'">Fetch Here</button>
+    </fieldset>
     </div>
     <script>
       function validateForm() {

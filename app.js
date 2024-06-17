@@ -20,7 +20,7 @@ app.use("/", route); // Mounting routes defined in './routes/route' to the root 
 // Define route to create a new user
 app.post("/createUser", async (req, res) => {
   try {
-    const newUser = await user.create(req.body);
+    const newUser = await user.create(req.body); // Assuming 'user' model is imported correctly
     res.status(201).send(newUser);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -30,7 +30,7 @@ app.post("/createUser", async (req, res) => {
 // Define route to fetch all users
 app.get("/getAllUsers", async (req, res) => {
   try {
-    const allUsers = await user.find({}); //'user' model is imported correctly
+    const allUsers = await user.find({}); // Assuming 'user' model is imported correctly
     res.json(allUsers);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -50,3 +50,4 @@ mongoose
 app.listen(3000, (err, data) => {
   console.log("started");
 });
+//

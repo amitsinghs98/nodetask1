@@ -9,10 +9,12 @@ const userSchema = new Schema(
     mobileNo: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     address: {
       street: { type: String, default: "" },

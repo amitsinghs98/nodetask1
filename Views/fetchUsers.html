@@ -34,6 +34,22 @@
         background-color: #f2f2f2;
         text-align: left;
       }
+
+      #clear-button {
+        background-color: rgb(218, 79, 24);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 30px;
+        transition: background-color 0.3s ease;
+      }
+
+      #clear-button:hover {
+        background-color: darkred;
+      }
     </style>
   </head>
 
@@ -53,7 +69,16 @@
       </thead>
       <tbody id="user-list"></tbody>
     </table>
-
+    <br />
+    <br />
+    <div>
+      <h2>
+        <button onclick="clearDatabase()" id="clear-button">
+          Clear Database
+        </button>
+        <h3 id="clear-msg-h3"></h3>
+      </h2>
+    </div>
     <script>
       // Function to fetch users
       function fetchUsers() {
@@ -89,6 +114,25 @@
 
       // Fetch users when the page loads
       document.addEventListener("DOMContentLoaded", fetchUsers);
+
+      //clear database
+      function clearDatabase() {
+        fetch("/deleteUser", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then(() => {
+          fetchUsers();
+          const clearDB = document.getElementById("clear-msg-h3");
+          clearDB.innerText = "User Database has been cleared successfully";
+
+          // Delay the reload by 5 seconds
+          setTimeout(() => {
+            location.reload();
+          }, 2000);
+        })();
+      }
     </script>
   </body>
 </html>
