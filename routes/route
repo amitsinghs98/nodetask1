@@ -61,7 +61,6 @@ router.get("/liveEmail", (req, res) => {
 router.post("/checkLiveEmail", async (req, res) => {
   console.log("checkEmail");
 
-
   try {
     const user = await User.findOne({ email: req.body.email });
 
@@ -73,6 +72,20 @@ router.post("/checkLiveEmail", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.get("/getUserDetails", async (req, res) => {
+  const email = req.query.email;
+  try {
+    const user = await User.findOne({ email: email });
+    if (user) {
+      res.json({ success: true, user: user });
+    } else {
+      res.json({ success: false, message: "User not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error." });
   }
 });
 module.exports = router;

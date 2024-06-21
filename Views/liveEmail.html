@@ -65,6 +65,45 @@
         border: 1px solid #ddd;
         margin-bottom: 10px;
         border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 90%;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -77,23 +116,63 @@
       <button type="submit" id="submitEmailCheck">Check</button>
     </form>
     <h1>Live Users</h1>
-
     <ul id="liveUsers"></ul>
+
+    <!-- Modal -->
+    <div id="userModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>User Details</h2>
+        <p id="userDetails"></p>
+      </div>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
 
-      // Function to update the list of live use/rs
+      // Function to update the list of live users
       function updateLiveUsers(users) {
         const liveUsersList = document.getElementById("liveUsers");
         liveUsersList.innerHTML = "";
 
         users.forEach((user) => {
           const li = document.createElement("li");
-          li.textContent = `Name: ${user.firstName},Email: ${user.email}, Socket ID: ${user.socketId}`;
+          li.textContent = `Name: ${user.firstName}, Email: ${user.email}, Socket ID: ${user.socketId}`;
+          li.addEventListener("click", () => {
+            fetchUserDetails(user.email);
+          });
           liveUsersList.appendChild(li);
         });
+      }
+
+      // Function to fetch user details by email and show in modal
+      function fetchUserDetails(email) {
+        fetch(`/getUserDetails?email=${encodeURIComponent(email)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              showModal(data.user);
+            } else {
+              alert("Failed to fetch user details.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      // Function to show the modal with user details
+      function showModal(user) {
+        const modal = document.getElementById("userModal");
+        const userDetails = document.getElementById("userDetails");
+        userDetails.textContent = `
+    Name: ${user.firstName} ${user.lastName}\n
+    Email: ${user.email}\n
+    Mobile No: ${user.mobileNo}\n
+    Address: ${user.address.street} ${user.address.city} ${user.address.state} ${user.address.country}\n
+    Socket ID: ${user.socketId}`;
+        modal.style.display = "flex";
       }
 
       // Socket.IO event listener to update live users
@@ -105,7 +184,6 @@
       function fetchUserInfo(event) {
         event.preventDefault(); // Prevent form from submitting the default way
         const email = document.getElementById("email").value;
-        alert(email);
         fetch("/checkLiveEmail", {
           method: "POST",
           headers: {
@@ -116,13 +194,10 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.exists) {
-              alert("Email is registered.");
-              console.log(data.data);
               socket.emit("joinLiveUsers", {
                 email: data.data.email,
                 firstName: data.data.firstName,
               });
-              // Here you can display more detailed user information in a popup or modal
             } else {
               alert("Email is not registered.");
             }
@@ -135,6 +210,19 @@
       document
         .getElementById("emailCheckForm")
         .addEventListener("submit", fetchUserInfo);
+
+      // Close the modal when the close button is clicked
+      document.querySelector(".close").addEventListener("click", () => {
+        document.getElementById("userModal").style.display = "none";
+      });
+
+      // Close the modal when clicking outside the modal content
+      window.addEventListener("click", (event) => {
+        const modal = document.getElementById("userModal");
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html>
