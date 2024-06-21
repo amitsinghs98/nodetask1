@@ -1,10 +1,15 @@
 require("dotenv").config();
 const express = require("express");
+const http = require("http");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const User = require("./model/model");
+const socket = require("./socket");
 
 const app = express();
+const server = http.createServer(app);
+const io = socket.init(server); // Initialize Socket.IO
 
 // Middleware for parsing JSON and URL-encoded data
 app.use(bodyParser.json());
@@ -17,27 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 const route = require("./routes/route"); // Routes are defined in './routes/route'
 app.use("/", route); // Mounting routes defined in './routes/route' to the root path '/'
 
-// Define route to create a new user
-app.post("/createUser", async (req, res) => {
-  try {
-    const newUser = await user.create(req.body); // Assuming 'user' model is imported correctly
-    res.status(201).send(newUser);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-// Define route to fetch all users
-app.get("/getAllUsers", async (req, res) => {
-  try {
-    const allUsers = await user.find({}); // Assuming 'user' model is imported correctly
-    res.json(allUsers);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 // Defining the mongoose connection
-
 mongoose
   .connect(process.env.MongoDB_URL, {})
   .then(() => {
@@ -47,7 +32,19 @@ mongoose
     console.log(err);
   });
 
-app.listen(3000, (err, data) => {
-  console.log("started");
+// Server listening
+server.listen(4000, (err, data) => {
+  console.log("Server started on port 4000");
 });
-//
+
+const socketModule = require("./socket");
+async function clearAllSocketData() {
+  try {
+    await socketModule.clearAllData();
+    console.log("All data cleared and all clients disconnected.");
+  } catch (err) {
+    console.error("Error clearing data:", err.message);
+  }
+}
+
+// clearAllSocketData();

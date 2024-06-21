@@ -9,7 +9,6 @@ const userSchema = new Schema(
     mobileNo: {
       type: String,
       required: true,
-      unique: true,
     },
     email: {
       type: String,
@@ -32,6 +31,7 @@ const userSchema = new Schema(
       required: true,
       minlength: 8,
     },
+    socketId: { type: String },
   },
   { timestamps: true }
 );

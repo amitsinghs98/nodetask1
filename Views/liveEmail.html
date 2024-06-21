@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check Registered Email</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Enter Registered Email Address</h1>
+    <form id="emailCheckForm">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required />
+      <button type="submit" id="submitEmailCheck">Check</button>
+    </form>
+    <h1>Live Users</h1>
+
+    <ul id="liveUsers"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      // Function to update the list of live use/rs
+      function updateLiveUsers(users) {
+        const liveUsersList = document.getElementById("liveUsers");
+        liveUsersList.innerHTML = "";
+
+        users.forEach((user) => {
+          const li = document.createElement("li");
+          li.textContent = `Name: ${user.firstName},Email: ${user.email}, Socket ID: ${user.socketId}`;
+          liveUsersList.appendChild(li);
+        });
+      }
+
+      // Socket.IO event listener to update live users
+      socket.on("update-live-users", function (liveUsers) {
+        updateLiveUsers(liveUsers);
+      });
+
+      // Fetch user info function
+      function fetchUserInfo(event) {
+        event.preventDefault(); // Prevent form from submitting the default way
+        const email = document.getElementById("email").value;
+        alert(email);
+        fetch("/checkLiveEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.exists) {
+              alert("Email is registered.");
+              console.log(data.data);
+              socket.emit("joinLiveUsers", {
+                email: data.data.email,
+                firstName: data.data.firstName,
+              });
+              // Here you can display more detailed user information in a popup or modal
+            } else {
+              alert("Email is not registered.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      document
+        .getElementById("emailCheckForm")
+        .addEventListener("submit", fetchUserInfo);
+    </script>
+  </body>
+</html>

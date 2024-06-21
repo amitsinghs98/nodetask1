@@ -65,6 +65,7 @@ input[type="submit"] {
   color: white;
   padding: 10px 20px;
   border: none;
+  margin-bottom: 10px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
@@ -88,6 +89,22 @@ input[type="submit"]:hover {
   }
 
   #fetch-button:hover {
+    background-color:  aquamarine;
+  }
+
+  #live-email-button {
+    background-color: rgb(0, 168, 180); 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 30px;
+    transition: background-color 0.3s ease;
+  }
+
+  #live-email-button:hover {
     background-color:  aquamarine;
   }
 
@@ -279,11 +296,14 @@ legend {
         </fieldset>
       </div>
       <input type="submit" value="Save Data" />
+      <button id="live-email-button" type="button" onclick="location.href='/liveEmail'">Join Room</button>
     </form>
     <div id="fetch-div">
       <fieldset id="fetch-fieldset">
       <h1 style="padding-top: 20px;";>Here You can Fetch User Data</h1>
       <button id="fetch-button" type="button" onclick="location.href='/fetchUsers'">Fetch Here</button>
+     
+
     </fieldset>
     </div>
     <script>
@@ -385,6 +405,9 @@ legend {
               });
           }
         });
+
+      
+
     </script>
   </body>
 </html>
